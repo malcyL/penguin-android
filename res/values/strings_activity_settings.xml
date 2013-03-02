@@ -9,7 +9,7 @@
     <string name="pref_default_display_name">John Smith</string>
     
     <string name="pref_title_server_url">Penguin Server Url</string>
-    <string name="pref_default_server_url">http://virtualpenguin.herokuapp.com/</string>
+    <string name="pref_default_server_url">http://malcyl.github.com/penguin-android//</string>
     
 
 </resources>

@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 
 	private void loadWebview() {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverUrl = sharedPrefs.getString("penguin_server_url", "http://virtualpenguin.herokuapp.com");
+		String serverUrl = sharedPrefs.getString("penguin_server_url", "http://malcyl.github.com/penguin-android/");
 		if (!serverUrl.equals(currentServerUrl)) {
 			currentServerUrl = serverUrl;
 			Log.i("loadWebView", String.format("Loading webview with url %s", currentServerUrl));
