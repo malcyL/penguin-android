@@ -1,4 +1,4 @@
-package uk.co.blackpepper.penguin;
+package uk.co.blackpepper.penguin.android;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 import java.util.List;
+
+import uk.co.blackpepper.penguin.R;
 
 public class SettingsActivity extends PreferenceActivity {
 

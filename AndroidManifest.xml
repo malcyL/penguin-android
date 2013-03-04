@@ -16,11 +16,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="uk.co.blackpepper.penguin.SettingsActivity"
+            android:name="uk.co.blackpepper.penguin.android.SettingsActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="uk.co.blackpepper.penguin.MainActivity"
+            android:name="uk.co.blackpepper.penguin.android.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

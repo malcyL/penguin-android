@@ -1,5 +1,6 @@
-package uk.co.blackpepper.penguin;
+package uk.co.blackpepper.penguin.android;
 
+import uk.co.blackpepper.penguin.R;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
