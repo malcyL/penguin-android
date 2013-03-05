@@ -1,103 +1,86 @@
 package uk.co.blackpepper.penguin.android;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import uk.co.blackpepper.penguin.R;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
-public class SettingsActivity extends PreferenceActivity
+public class SettingsActivity extends PreferenceActivity 
 {
-	private static final boolean ALWAYS_SIMPLE_PREFS = false;
+	public static final String PENGUIN_SERVER_URL_PREF_KEY = "penguin_server_url";
+	public static final String AUTHOR_NAME_PREF_KEY = "display_name";
 
+	
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState)
+	protected void onCreate(Bundle savedInstanceState) 
 	{
-		super.onPostCreate(savedInstanceState);
-
-		setupSimplePreferencesScreen();
-	}
-
-	private void setupSimplePreferencesScreen()
-	{
-		if (!isSimplePreferences(this))
-		{
-			return;
-		}
-
+		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.pref_general);
+		
+		setupAuthorNamePreference();
+		setupServerUrlPreference(this);
 
-		bindPreferenceSummaryToValue(findPreference("example_text"));
-		bindPreferenceSummaryToValue(findPreference("penguin_server_url"));
 	}
 
-	@Override
-	public boolean onIsMultiPane()
+	private void setupAuthorNamePreference() 
 	{
-		return isXLargeTablet(this) && !isSimplePreferences(this);
-	}
-
-	private static boolean isXLargeTablet(Context context)
-	{
-		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-	}
-
-	private static boolean isSimplePreferences(Context context)
-	{
-		return ALWAYS_SIMPLE_PREFS || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || !isXLargeTablet(context);
-	}
-
-	@Override
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public void onBuildHeaders(List<Header> target)
-	{
-		if (!isSimplePreferences(this))
-		{
-			loadHeadersFromResource(R.xml.pref_headers, target);
-		}
-	}
-
-	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener =
-		new Preference.OnPreferenceChangeListener()
-		{
+		EditTextPreference autorUrlPref =(EditTextPreference)getPreferenceScreen().findPreference(AUTHOR_NAME_PREF_KEY);
+		
+		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_PREF_KEY, "Please Configure Author Name."));
+		
+		autorUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
-			public boolean onPreferenceChange(Preference preference, Object value)
-			{
-				String stringValue = value.toString();
-
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				String stringValue = newValue.toString();
 				preference.setSummary(stringValue);
-
-				return true;
-			}
-		};
-
-	private static void bindPreferenceSummaryToValue(Preference preference)
-	{
-		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-			PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+                return true;			
+            }
+		});
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static class GeneralPreferenceFragment extends PreferenceFragment
+	private void setupServerUrlPreference(final Context context) 
 	{
-		@Override
-		public void onCreate(Bundle savedInstanceState)
+		EditTextPreference serverNamePref =	(EditTextPreference)getPreferenceScreen().findPreference(PENGUIN_SERVER_URL_PREF_KEY);
+		
+		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_PREF_KEY, "Please Configure Server Url."));
+		
+		serverNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				String newServerUrl = newValue.toString();
+				Boolean valid = true;
+                if (!validServerUrl(newServerUrl)) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Invalid Server Url");
+                    builder.setMessage("Please enter a valid Url.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.show();
+                    valid = false;
+                } else {
+    				preference.setSummary(newServerUrl);
+                }
+				
+                return valid;			}
+		});
+	}
+	
+	private boolean validServerUrl(String serverUrl) 
+	{
+		try
 		{
-			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.pref_general);
-
-			bindPreferenceSummaryToValue(findPreference("example_text"));
-			bindPreferenceSummaryToValue(findPreference("penguin_server_url"));
+			new URL(serverUrl);
+			return true;
+		}
+		catch (MalformedURLException e)
+		{
+			return false;
 		}
 	}
 }

@@ -14,7 +14,9 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,15 +35,6 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		queueService = new HttpClientQueueService(new DefaultHttpClient(), "http://10.0.2.2:8080/api");
-
-		adapter = new QueueListAdapter(this, R.layout.queue_list_item);
-
-		setListAdapter(adapter);
-
-		getLoaderManager().initLoader(0, null, this);
-
 	}
 
 	@Override
@@ -90,7 +83,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 				{
 					// TODO Handle Properly
 					Log.e(TAG, "Error Loading Queues", e);
-					throw new RuntimeException(e);
+					return null;
 				}
 			}
 		};
@@ -117,4 +110,43 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		intent.putExtra("id", queue.getId());
 		startActivity(intent);
 	}
+
+	@Override
+	public void onResume() {
+		if (isServerUrlConfigured()) 
+		{
+			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl());
+
+			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
+			setListAdapter(adapter);
+			getLoaderManager().initLoader(0, null, this);
+		} else {
+			Log.i(TAG, "Displaying Setting from onResume");
+			displaySettings();
+		}
+		super.onResume();
+	}
+
+	private String getServerUrl()
+	{
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String serverUrl = sharedPrefs.getString(SettingsActivity.PENGUIN_SERVER_URL_PREF_KEY, null);
+		return serverUrl;
+	}
+	
+	private boolean isServerUrlConfigured() 
+	{
+		String serverUrl = getServerUrl();
+		if (null == serverUrl || serverUrl.equals(R.string.pref_default_server_url)) {
+			return false;
+		}
+		return true;
+	}
+
+	private void displaySettings() 
+	{
+		Intent settingsIntent = new Intent(this, SettingsActivity.class);
+		startActivity(settingsIntent);			
+	}
+
 }
