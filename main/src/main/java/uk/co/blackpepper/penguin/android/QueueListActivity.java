@@ -126,7 +126,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
 		String serverUrl = PreferenceUtils.getServerUrl(this);
 		
-		if (defaultServerUrl.equals(serverUrl)) {
+		if (null == serverUrl || defaultServerUrl.equals(serverUrl)) {
 			return false;
 		}
 		return true;
