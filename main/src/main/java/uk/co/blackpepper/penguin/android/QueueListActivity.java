@@ -14,9 +14,7 @@ import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +23,6 @@ import android.widget.ListView;
 
 public class QueueListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Queue>>
 {
-	private static final String API_PATH = "/api";
-
 	private static final String TAG = QueueListActivity.class.getName();
 
 	private QueueService queueService;
@@ -38,7 +34,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	{
 		if (isServerUrlConfigured())
 		{
-			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl() + API_PATH);
+			queueService = new HttpClientQueueService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(this));
 
 			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
 			setListAdapter(adapter);
@@ -125,17 +121,10 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		startActivity(intent);
 	}
 
-	private String getServerUrl()
-	{
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverUrl = sharedPrefs.getString(SettingsActivity.PENGUIN_SERVER_URL_PREF_KEY, null);
-		return serverUrl;
-	}
-	
 	private boolean isServerUrlConfigured() 
 	{
 		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
-		String serverUrl = getServerUrl();
+		String serverUrl = PreferenceUtils.getServerUrl(this);
 		
 		if (defaultServerUrl.equals(serverUrl)) {
 			return false;

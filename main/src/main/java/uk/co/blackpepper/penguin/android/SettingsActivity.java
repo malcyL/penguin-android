@@ -1,5 +1,8 @@
 package uk.co.blackpepper.penguin.android;
 
+import static uk.co.blackpepper.penguin.android.PreferenceUtils.AUTHOR_NAME_KEY;
+import static uk.co.blackpepper.penguin.android.PreferenceUtils.PENGUIN_SERVER_URL_KEY;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -14,10 +17,6 @@ import android.preference.PreferenceManager;
 
 public class SettingsActivity extends PreferenceActivity 
 {
-	public static final String PENGUIN_SERVER_URL_PREF_KEY = "penguin_server_url";
-	public static final String AUTHOR_NAME_PREF_KEY = "display_name";
-
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -31,9 +30,9 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupAuthorNamePreference() 
 	{
-		EditTextPreference autorUrlPref =(EditTextPreference)getPreferenceScreen().findPreference(AUTHOR_NAME_PREF_KEY);
+		EditTextPreference autorUrlPref =(EditTextPreference)getPreferenceScreen().findPreference(AUTHOR_NAME_KEY);
 		String defaultAuthorName = getResources().getString(R.string.pref_default_display_name);
-		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_PREF_KEY, defaultAuthorName));
+		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_KEY, defaultAuthorName));
 		
 		autorUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -47,9 +46,9 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupServerUrlPreference(final Context context) 
 	{
-		EditTextPreference serverNamePref =	(EditTextPreference)getPreferenceScreen().findPreference(PENGUIN_SERVER_URL_PREF_KEY);
+		EditTextPreference serverNamePref =	(EditTextPreference)getPreferenceScreen().findPreference(PENGUIN_SERVER_URL_KEY);
 		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
-		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_PREF_KEY, defaultServerUrl));
+		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_KEY, defaultServerUrl));
 		
 		serverNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override

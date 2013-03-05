@@ -37,7 +37,7 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 	{
 		super.onCreate(savedInstanceState);
 		
-		queueService = new HttpClientQueueService(new DefaultHttpClient(), "http://10.0.2.2:8080/api");
+		queueService = new HttpClientQueueService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(this));
 		
 		queueId = getIntent().getExtras().getString("id");
 		
