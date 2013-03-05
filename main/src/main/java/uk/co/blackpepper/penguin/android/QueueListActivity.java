@@ -36,7 +36,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		{
 			queueService = new HttpClientQueueService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(this));
 
-			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
+			adapter = new QueueListAdapter(this, android.R.layout.simple_list_item_1);
 			setListAdapter(adapter);
 			
 			getLoaderManager().initLoader(0, null, this);
