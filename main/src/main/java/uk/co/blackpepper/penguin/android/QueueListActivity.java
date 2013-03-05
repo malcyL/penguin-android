@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 public class QueueListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Queue>>
 {
@@ -104,5 +106,15 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	public void onLoaderReset(Loader<List<Queue>> loader)
 	{
 		adapter.setData(null);
+	}
+	
+	@Override
+	protected void onListItemClick(ListView listView, View view, int position, long id)
+	{
+		Queue queue = (Queue) listView.getItemAtPosition(position);
+		
+		Intent intent = new Intent(this,  QueueActivity.class);
+		intent.putExtra("id", queue.getId());
+		startActivity(intent);
 	}
 }

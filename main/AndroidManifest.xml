@@ -27,6 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="uk.co.blackpepper.penguin.android.QueueActivity"
+            android:label="@string/title_activity_queue" >
+        </activity>
     </application>
 
 </manifest>
