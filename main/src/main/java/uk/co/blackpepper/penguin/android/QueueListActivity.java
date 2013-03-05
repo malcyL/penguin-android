@@ -22,24 +22,26 @@ import android.view.MenuItem;
 public class QueueListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Queue>>
 {
 	private static final String TAG = QueueListActivity.class.getName();
-	
+
 	private QueueService queueService;
+
 	private QueueListAdapter adapter;
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
-		
+
 		queueService = new HttpClientQueueService(new DefaultHttpClient(), "http://10.0.2.2:8080/api");
 
 		adapter = new QueueListAdapter(this, R.layout.queue_list_item);
-		
+
 		setListAdapter(adapter);
-		
+
 		getLoaderManager().initLoader(0, null, this);
-		
+
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -58,26 +60,33 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 				Intent settingsIntent = new Intent(this, SettingsActivity.class);
 				startActivity(settingsIntent);
 				return true;
+				
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
 	@Override
-	public Loader<List<Queue>> onCreateLoader(int id, Bundle args) {
-		return new AsyncTaskLoader<List<Queue>>(this) {
-			@Override 
-			protected void onStartLoading() 
+	public Loader<List<Queue>> onCreateLoader(int id, Bundle args)
+	{
+		return new AsyncTaskLoader<List<Queue>>(this)
+		{
+			@Override
+			protected void onStartLoading()
 			{
 				forceLoad();
 			}
 
 			@Override
-			public List<Queue> loadInBackground() {
-				try {
+			public List<Queue> loadInBackground()
+			{
+				try
+				{
 					return queueService.getAll();
-				} catch (ServiceException e) {
-					//TODO Handle Properly
+				}
+				catch (ServiceException e)
+				{
+					// TODO Handle Properly
 					Log.e(TAG, "Error Loading Queues", e);
 					throw new RuntimeException(e);
 				}
@@ -86,12 +95,14 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<Queue>> loader, List<Queue> data) {
-		adapter.setData(data);		
+	public void onLoadFinished(Loader<List<Queue>> loader, List<Queue> data)
+	{
+		adapter.setData(data);
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<Queue>> loader) {
-		adapter.setData(null);		
+	public void onLoaderReset(Loader<List<Queue>> loader)
+	{
+		adapter.setData(null);
 	}
 }
