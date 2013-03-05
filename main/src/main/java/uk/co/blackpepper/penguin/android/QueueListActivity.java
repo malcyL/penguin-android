@@ -25,6 +25,8 @@ import android.widget.ListView;
 
 public class QueueListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Queue>>
 {
+	private static final String API_PATH = "/api";
+
 	private static final String TAG = QueueListActivity.class.getName();
 
 	private QueueService queueService;
@@ -115,7 +117,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	public void onResume() {
 		if (isServerUrlConfigured()) 
 		{
-			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl());
+			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl() + API_PATH);
 
 			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
 			setListAdapter(adapter);
@@ -136,8 +138,10 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	
 	private boolean isServerUrlConfigured() 
 	{
+		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
 		String serverUrl = getServerUrl();
-		if (null == serverUrl || serverUrl.equals(R.string.pref_default_server_url)) {
+		
+		if (defaultServerUrl.equals(serverUrl)) {
 			return false;
 		}
 		return true;

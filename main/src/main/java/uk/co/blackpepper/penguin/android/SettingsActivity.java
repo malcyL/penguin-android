@@ -32,8 +32,8 @@ public class SettingsActivity extends PreferenceActivity
 	private void setupAuthorNamePreference() 
 	{
 		EditTextPreference autorUrlPref =(EditTextPreference)getPreferenceScreen().findPreference(AUTHOR_NAME_PREF_KEY);
-		
-		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_PREF_KEY, "Please Configure Author Name."));
+		String defaultAuthorName = getResources().getString(R.string.pref_default_display_name);
+		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_PREF_KEY, defaultAuthorName));
 		
 		autorUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -48,8 +48,8 @@ public class SettingsActivity extends PreferenceActivity
 	private void setupServerUrlPreference(final Context context) 
 	{
 		EditTextPreference serverNamePref =	(EditTextPreference)getPreferenceScreen().findPreference(PENGUIN_SERVER_URL_PREF_KEY);
-		
-		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_PREF_KEY, "Please Configure Server Url."));
+		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
+		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_PREF_KEY, defaultServerUrl));
 		
 		serverNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -58,6 +58,7 @@ public class SettingsActivity extends PreferenceActivity
 				Boolean valid = true;
                 if (!validServerUrl(newServerUrl)) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    //TODO externalise these strings
                     builder.setTitle("Invalid Server Url");
                     builder.setMessage("Please enter a valid Url.");
                     builder.setPositiveButton(android.R.string.ok, null);
