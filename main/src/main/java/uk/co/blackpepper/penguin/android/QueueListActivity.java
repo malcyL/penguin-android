@@ -52,7 +52,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.activity_queue_list, menu);
+		getMenuInflater().inflate(R.menu.queue_list_menu, menu);
 		return true;
 	}
 

@@ -47,7 +47,7 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.activity_queue, menu);
+		getMenuInflater().inflate(R.menu.queue_menu, menu);
 		
 		return true;
 	}
