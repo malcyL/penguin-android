@@ -3,7 +3,11 @@
 
     <string name="app_name">Penguin</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_rename">Rename</string>
     <string name="title_activity_queue_list">Queues</string>
     <string name="title_activity_queue">Queue</string>
+    <string name="dialog_queue_edit">Rename Queue</string>
+    <string name="rename">Rename</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
