@@ -34,15 +34,28 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	private QueueListAdapter adapter;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	public void onResume()
 	{
-		super.onCreate(savedInstanceState);
+		if (isServerUrlConfigured())
+		{
+			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl() + API_PATH);
+
+			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
+			setListAdapter(adapter);
+			
+			getLoaderManager().initLoader(0, null, this);
+		}
+		else
+		{
+			displaySettings();
+		}
+		
+		super.onResume();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_queue_list, menu);
 		return true;
 	}
@@ -50,7 +63,6 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		// Handle item selection
 		switch (item.getItemId())
 		{
 			case R.id.menu_settings:
@@ -113,22 +125,6 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		startActivity(intent);
 	}
 
-	@Override
-	public void onResume() {
-		if (isServerUrlConfigured()) 
-		{
-			queueService = new HttpClientQueueService(new DefaultHttpClient(), getServerUrl() + API_PATH);
-
-			adapter = new QueueListAdapter(this, R.layout.queue_list_item);
-			setListAdapter(adapter);
-			getLoaderManager().initLoader(0, null, this);
-		} else {
-			Log.i(TAG, "Displaying Setting from onResume");
-			displaySettings();
-		}
-		super.onResume();
-	}
-
 	private String getServerUrl()
 	{
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -152,5 +148,4 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		Intent settingsIntent = new Intent(this, SettingsActivity.class);
 		startActivity(settingsIntent);			
 	}
-
 }
