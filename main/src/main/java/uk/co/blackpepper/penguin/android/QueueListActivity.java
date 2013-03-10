@@ -118,6 +118,7 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 		
 		Intent intent = new Intent(this,  QueueActivity.class);
 		intent.putExtra("id", queue.getId());
+		intent.putExtra("queueName", queue.getName());
 		startActivity(intent);
 	}
 
