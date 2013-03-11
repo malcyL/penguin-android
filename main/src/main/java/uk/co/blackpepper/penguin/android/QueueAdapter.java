@@ -4,6 +4,7 @@ import java.util.List;
 
 import uk.co.blackpepper.penguin.client.Story;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -29,10 +30,16 @@ public class QueueAdapter extends ArrayAdapter<Story>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view = super.getView(position, convertView, parent);
+		TextView textView = (TextView) view;
 		
 		Story story = getItem(position);
 		String text = String.format("%s - %s", story.getReference(), story.getAuthor());
-		((TextView) view).setText(text);
+		textView.setText(text);
+		
+		// TODO This should be story.isMerged()
+		if (story.getMerged()) {
+			textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+		}
 
 		return view;
 	}

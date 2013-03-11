@@ -32,6 +32,8 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 	private StoryService storyService;
 	
 	private String queueId;
+
+	private String queueName;
 	
 	private Queue queue;
 	
@@ -45,15 +47,16 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 		storyService = new HttpClientStoryService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(this));
 		
 		queueId = getIntent().getExtras().getString("id");
+		queueName = getIntent().getExtras().getString("queueName"); 
 
-		setTitle(getIntent().getExtras().getString("queueName"));
+		setTitle(queueName);
 
 		adapter = new QueueAdapter(this, android.R.layout.simple_list_item_1);
 		setListAdapter(adapter);
 		
 		getLoaderManager().initLoader(0, null, this);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -125,8 +128,8 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 		QueueEditDialogFragment fragment = new QueueEditDialogFragment();
 		
 		Bundle arguments = new Bundle();
-		arguments.putString(QueueEditDialogFragment.ID, queue.getId());
-		arguments.putString(QueueEditDialogFragment.NAME, queue.getName());
+		arguments.putString(QueueEditDialogFragment.ID, queueId);
+		arguments.putString(QueueEditDialogFragment.NAME, queueName);
 		fragment.setArguments(arguments);
 		
 		fragment.show(getFragmentManager(), "queueEdit");
