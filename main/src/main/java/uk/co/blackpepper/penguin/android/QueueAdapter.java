@@ -36,8 +36,7 @@ public class QueueAdapter extends ArrayAdapter<Story>
 		String text = String.format("%s - %s", story.getReference(), story.getAuthor());
 		textView.setText(text);
 		
-		// TODO This should be story.isMerged()
-		if (story.getMerged()) {
+		if (story.isMerged()) {
 			textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 		}
 
