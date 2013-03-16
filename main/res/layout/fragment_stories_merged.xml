@@ -1,0 +1,11 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <fragment
+        android:id="@+id/merged_story_list_fragment"
+        android:name="uk.co.blackpepper.penguin.android.StoryListFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>
