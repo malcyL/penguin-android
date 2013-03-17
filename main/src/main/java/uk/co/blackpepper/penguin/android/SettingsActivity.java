@@ -60,16 +60,15 @@ public class SettingsActivity extends PreferenceActivity
 			public boolean onPreferenceChange(Preference preference, Object newValue)
 			{
 				String newServerUrl = newValue.toString();
-				Boolean valid = true;
+				boolean valid = validServerUrl(newServerUrl);
 				
-				if (!validServerUrl(newServerUrl))
+				if (valid)
 				{
-					Toast.makeText(context, R.string.toast_invalid_server_url, Toast.LENGTH_SHORT).show();
-					valid = false;
+					preference.setSummary(newServerUrl);
 				}
 				else
 				{
-					preference.setSummary(newServerUrl);
+					Toast.makeText(context, R.string.toast_invalid_server_url, Toast.LENGTH_SHORT).show();
 				}
 
 				return valid;
