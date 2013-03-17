@@ -6,6 +6,8 @@ import static uk.co.blackpepper.penguin.android.PreferenceUtils.SERVER_URL_KEY;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import uk.co.blackpepper.penguin.R;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import uk.co.blackpepper.penguin.R;
 import uk.co.blackpepper.penguin.client.ServiceException;
 import uk.co.blackpepper.penguin.client.Story;
 import uk.co.blackpepper.penguin.client.StoryService;
