@@ -27,7 +27,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 				return new QueuesFragment();
 
 			case 1:
-				return new PenguinsListFragment();
+				return new PenguinListFragment();
 
 			default:
 				throw new IllegalArgumentException("position: " + position);

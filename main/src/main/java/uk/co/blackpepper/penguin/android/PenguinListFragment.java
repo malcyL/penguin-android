@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * A penguin fragment - A list of where the penguins are coming soon!
  */
-public class PenguinsListFragment extends Fragment
+public class PenguinListFragment extends Fragment
 {
 	// Fragment methods -------------------------------------------------------
 	
