@@ -3,101 +3,14 @@ package uk.co.blackpepper.penguin.android;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class LateralQueueNavigationActivity extends FragmentActivity
 {
-	// types ------------------------------------------------------------------
-	
-	/**
-	 * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment representing an object in the
-	 * collection.
-	 */
-	public static class QueuePagerAdapter extends FragmentStatePagerAdapter
-	{
-		public QueuePagerAdapter(FragmentManager fm)
-		{
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position)
-		{
-			switch (position)
-			{
-				case 0:
-					return new UnmergedStoriesFragment();
-					
-				case 1:
-					return new MergedStoriesFragment();
-					
-				default:
-					// TODO This shouldn't happen. How do we handle the error?
-					return null;
-			}
-		}
-
-		@Override
-		public int getCount()
-		{
-			// For this contrived example, we have a 100-object collection.
-			return 2;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position)
-		{
-			switch (position)
-			{
-				case 0:
-					// TODO This should come from strings.xml
-					return "Pending";
-				case 1:
-					// TODO This should come from strings.xml
-					return "Merged";
-				default:
-					// TODO This shouldn't happen. How do we handle the error?
-					return null;
-			}
-		}
-	}
-
-	/**
-	 * A fragment holding the list of unmerged stories.
-	 */
-	public static class UnmergedStoriesFragment extends Fragment
-	{
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			View viewRoot = inflater.inflate(R.layout.fragment_stories_unmerged, container, false);
-			return viewRoot;
-		}
-	}
-
-	/**
-	 * A fragment holding the list of merged stories.
-	 */
-	public static class MergedStoriesFragment extends Fragment
-	{
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			View viewRoot = inflater.inflate(R.layout.fragment_stories_merged, container, false);
-			return viewRoot;
-		}
-	}
-	
 	// fields -----------------------------------------------------------------
 	
 	/**

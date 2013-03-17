@@ -4,103 +4,13 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
-	// types ------------------------------------------------------------------
-	
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary sections of the app.
-	 */
-	public static class AppSectionsPagerAdapter extends FragmentPagerAdapter
-	{
-		public AppSectionsPagerAdapter(FragmentManager fm)
-		{
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int i)
-		{
-			switch (i)
-			{
-				case 0:
-					return new QueuesFragment();
-
-				case 1:
-					return new PenguinsListFragment();
-
-				default:
-					// This is an error really and should never happen. Until I know how to deal with that, return Queue
-					// List
-					return new QueuesFragment();
-			}
-		}
-
-		@Override
-		public int getCount()
-		{
-			return 2;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position)
-		{
-			switch (position)
-			{
-				case 0:
-					// TODO This should come from strings.xml
-					return "Queues";
-
-				case 1:
-					// TODO This should come from strings.xml
-					return "Penguins";
-
-				default:
-					// TODO This shouldn't happen. How do we handle the error?
-					return null;
-			}
-		}
-	}
-
-	/**
-	 * A fragment showing a list of queues.
-	 */
-	public static class QueuesFragment extends Fragment
-	{
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			View rootView = inflater.inflate(R.layout.fragment_queues, container, false);
-			return rootView;
-		}
-	}
-
-	/**
-	 * A penguin fragment - A list of where the penguins are coming soon!
-	 */
-	public static class PenguinsListFragment extends Fragment
-	{
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-		{
-			View rootView = inflater.inflate(R.layout.fragment_penguin_list, container, false);
-			((TextView) rootView.findViewById(android.R.id.text1)).setText(R.string.coming_soon);
-			return rootView;
-		}
-	}
-	
 	// fields -----------------------------------------------------------------
 	
 	/**
