@@ -7,13 +7,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import uk.co.blackpepper.penguin.R;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity
 {
@@ -64,12 +64,7 @@ public class SettingsActivity extends PreferenceActivity
 				
 				if (!validServerUrl(newServerUrl))
 				{
-					final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					// TODO externalise these strings
-					builder.setTitle("Invalid Server Url");
-					builder.setMessage("Please enter a valid Url.");
-					builder.setPositiveButton(android.R.string.ok, null);
-					builder.show();
+					Toast.makeText(context, R.string.toast_invalid_server_url, Toast.LENGTH_SHORT).show();
 					valid = false;
 				}
 				else
