@@ -36,7 +36,7 @@ public class LateralQueueNavigationActivity extends FragmentActivity
 			switch (position)
 			{
 				case 0:
-					return new UnMergedStoriesFragment();
+					return new UnmergedStoriesFragment();
 					
 				case 1:
 					return new MergedStoriesFragment();
@@ -75,7 +75,7 @@ public class LateralQueueNavigationActivity extends FragmentActivity
 	/**
 	 * A fragment holding the list of unmerged stories.
 	 */
-	public static class UnMergedStoriesFragment extends Fragment
+	public static class UnmergedStoriesFragment extends Fragment
 	{
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
