@@ -2,21 +2,29 @@ package uk.co.blackpepper.penguin.android;
 
 import java.util.List;
 
+import uk.co.blackpepper.penguin.R;
 import uk.co.blackpepper.penguin.client.Story;
 import android.content.Context;
 import android.graphics.Paint;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class StoryAdapter extends ArrayAdapter<Story>
 {
+	// fields -----------------------------------------------------------------
+    
+    	private final Context context;
+    
 	// constructors -----------------------------------------------------------
 	
 	public StoryAdapter(Context context, int textViewResourceId)
 	{
 		super(context, textViewResourceId);
+		this.context = context;
 	}
 
 	// Adapter methods --------------------------------------------------------
@@ -24,20 +32,31 @@ public class StoryAdapter extends ArrayAdapter<Story>
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View view = super.getView(position, convertView, parent);
-		TextView textView = (TextView) view;
+		LayoutInflater inflater = (LayoutInflater) context
+			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.list_row, parent, false);
 
 		Story story = getItem(position);
+		
+		TextView titleTextView = (TextView) view.findViewById(R.id.title);
 		String text = String.format("%s - %s", story.getReference(), story.getAuthor());
-		textView.setText(text);
+		titleTextView.setText(text);
 
+		TextView subTitleTextView = (TextView) view.findViewById(R.id.sub_title);
+		subTitleTextView.setText(story.getTitle());
+
+		ImageView imageView = (ImageView) view.findViewById(R.id.logo);
+		imageView.setImageResource(R.drawable.folder);
+		
 		if (story.isMerged())
 		{
-			textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			titleTextView.setPaintFlags(titleTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			subTitleTextView.setPaintFlags(subTitleTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 		}
 		else
 		{
-			textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+			titleTextView.setPaintFlags(titleTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+			subTitleTextView.setPaintFlags(subTitleTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 		}
 
 		return view;
