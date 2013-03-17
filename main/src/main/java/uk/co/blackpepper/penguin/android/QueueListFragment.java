@@ -58,7 +58,7 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 	{
 		Queue queue = (Queue) listView.getItemAtPosition(position);
 
-		Intent intent = new Intent(getActivity(), LateralQueueNavigationActivity.class);
+		Intent intent = new Intent(getActivity(), QueueActivity.class);
 		intent.putExtra(QUEUE_ID_KEY, queue.getId());
 		intent.putExtra(QUEUE_NAME_KEY, queue.getName());
 		startActivity(intent);

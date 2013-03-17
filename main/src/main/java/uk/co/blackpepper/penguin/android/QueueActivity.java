@@ -9,7 +9,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-public class LateralQueueNavigationActivity extends FragmentActivity
+public class QueueActivity extends FragmentActivity
 {
 	// fields -----------------------------------------------------------------
 	
