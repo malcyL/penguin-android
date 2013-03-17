@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
 import android.view.MenuItem;
 
 public class QueueActivity extends FragmentActivity
@@ -19,6 +20,8 @@ public class QueueActivity extends FragmentActivity
 
 	private ViewPager viewPager;
 
+	private String queueId;
+	
 	private String queueName;
 
 	// FragmentActivity methods -----------------------------------------------
@@ -30,6 +33,7 @@ public class QueueActivity extends FragmentActivity
 		
 		setContentView(R.layout.activity_queue);
 
+		queueId = getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
 		queueName = getIntent().getExtras().getString(QueueListFragment.QUEUE_NAME_KEY);
 		setTitle(queueName);
 
@@ -47,6 +51,14 @@ public class QueueActivity extends FragmentActivity
 	}
 
 	// Activity methods -------------------------------------------------------
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.queue_menu, menu);
+
+		return true;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -74,8 +86,26 @@ public class QueueActivity extends FragmentActivity
 					NavUtils.navigateUpTo(this, upIntent);
 				}
 				return true;
+
+			case R.id.menu_rename:
+				showQueueEditDialog();
+				return true;
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+
+	// private methods --------------------------------------------------------
+
+	private void showQueueEditDialog()
+	{
+		QueueEditDialogFragment fragment = new QueueEditDialogFragment();
+
+		Bundle arguments = new Bundle();
+		arguments.putString(QueueEditDialogFragment.ID, queueId);
+		arguments.putString(QueueEditDialogFragment.NAME, queueName);
+		fragment.setArguments(arguments);
+
+		fragment.show(getFragmentManager(), "queueEdit");
 	}
 }
