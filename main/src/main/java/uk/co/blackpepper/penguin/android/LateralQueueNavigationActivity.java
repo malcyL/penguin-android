@@ -23,12 +23,12 @@ public class LateralQueueNavigationActivity extends FragmentActivity
 	 * re-create fragments as needed, saving and restoring their state in the process. This is important to conserve
 	 * memory and is a best practice when allowing navigation between objects in a potentially large collection.
 	 */
-	QueuePagerAdapter queuePagerAdapter;
+	private QueuePagerAdapter queuePagerAdapter;
 
 	/**
 	 * The {@link android.support.v4.view.ViewPager} that will display the object collection.
 	 */
-	ViewPager viewPager;
+	private ViewPager viewPager;
 
 	private String queueName;
 
