@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.blackpepper.penguin.android;
 
 import android.os.Bundle;
@@ -15,6 +12,8 @@ import android.widget.TextView;
  */
 public class PenguinsListFragment extends Fragment
 {
+	// Fragment methods -------------------------------------------------------
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{

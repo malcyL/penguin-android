@@ -11,6 +11,8 @@ import android.view.ViewGroup;
  */
 public class MergedStoriesFragment extends Fragment
 {
+	// Fragment methods -------------------------------------------------------
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{

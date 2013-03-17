@@ -9,10 +9,14 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class AppSectionsPagerAdapter extends FragmentPagerAdapter
 {
+	// constructors -----------------------------------------------------------
+	
 	public AppSectionsPagerAdapter(FragmentManager fm)
 	{
 		super(fm);
 	}
+
+	// FragmentStatePagerAdapter methods --------------------------------------
 
 	@Override
 	public Fragment getItem(int i)
@@ -31,6 +35,8 @@ public class AppSectionsPagerAdapter extends FragmentPagerAdapter
 				return new QueuesFragment();
 		}
 	}
+
+	// PagerAdapter methods ---------------------------------------------------
 
 	@Override
 	public int getCount()
