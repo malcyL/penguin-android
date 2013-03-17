@@ -24,7 +24,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 		switch (position)
 		{
 			case 0:
-				return new QueuesFragment();
+				return new QueueListFragment();
 
 			case 1:
 				return new PenguinListFragment();
