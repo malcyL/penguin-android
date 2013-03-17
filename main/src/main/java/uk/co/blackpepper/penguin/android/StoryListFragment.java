@@ -65,7 +65,7 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
-	public Loader<List<Story>> onCreateLoader(int arg0, Bundle arg1)
+	public Loader<List<Story>> onCreateLoader(int id, Bundle args)
 	{
 		return new AsyncTaskLoader<List<Story>>(getActivity())
 		{

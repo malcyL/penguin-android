@@ -67,7 +67,7 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
-	public Loader<List<Queue>> onCreateLoader(int arg0, Bundle arg1)
+	public Loader<List<Queue>> onCreateLoader(int id, Bundle args)
 	{
 		return new AsyncTaskLoader<List<Queue>>(getActivity())
 		{
