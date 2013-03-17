@@ -108,20 +108,14 @@ public class LateralQueueNavigationActivity extends FragmentActivity
 			switch (position)
 			{
 				case 0:
-				{
-					Fragment fragment = new UnMergedStoriesFragment();
-					return fragment;
-				}
+					return new UnMergedStoriesFragment();
+					
 				case 1:
-				{
-					Fragment fragment = new MergedStoriesFragment();
-					return fragment;
-				}
+					return new MergedStoriesFragment();
+					
 				default:
-				{
 					// TODO This shouldn't happen. How do we handle the error?
 					return null;
-				}
 			}
 		}
 
