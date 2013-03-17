@@ -1,5 +1,6 @@
 package uk.co.blackpepper.penguin.android;
 
+import uk.co.blackpepper.penguin.R;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;

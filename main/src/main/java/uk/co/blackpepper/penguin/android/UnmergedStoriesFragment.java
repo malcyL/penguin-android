@@ -1,5 +1,6 @@
 package uk.co.blackpepper.penguin.android;
 
+import uk.co.blackpepper.penguin.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
