@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity
 {
+	// Activity methods -------------------------------------------------------
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -26,6 +28,8 @@ public class SettingsActivity extends PreferenceActivity
 		setupAuthorNamePreference();
 		setupServerUrlPreference(this);
 	}
+	
+	// private methods --------------------------------------------------------
 
 	private void setupAuthorNamePreference()
 	{

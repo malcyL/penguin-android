@@ -21,7 +21,11 @@ import android.view.ViewGroup;
 
 public class StoryListFragment extends ListFragment implements LoaderCallbacks<List<Story>>
 {
+	// constants --------------------------------------------------------------
+	
 	private static final String TAG = StoryListFragment.class.getName();
+	
+	// fields -----------------------------------------------------------------
 
 	private StoryService storyService;
 
@@ -30,6 +34,8 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 	private String queueId;
 
 	private boolean merged;
+	
+	// ListFragment methods ---------------------------------------------------
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -55,6 +61,8 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
+	
+	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
 	public Loader<List<Story>> onCreateLoader(int arg0, Bundle arg1)

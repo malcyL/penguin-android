@@ -23,15 +23,21 @@ import android.widget.ListView;
 
 public class QueueListFragment extends ListFragment implements LoaderCallbacks<List<Queue>>
 {
+	// constants --------------------------------------------------------------
+	
 	public static String QUEUE_ID_KEY = "id";
 
 	public static String QUEUE_NAME_KEY = "queueName";
 
 	private static final String TAG = QueueListFragment.class.getName();
+	
+	// fields -----------------------------------------------------------------
 
 	private QueueService queueService;
 
 	private QueueAdapter adapter;
+	
+	// ListFragment methods ---------------------------------------------------
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -46,6 +52,19 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
+	
+	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id)
+	{
+		Queue queue = (Queue) listView.getItemAtPosition(position);
+
+		Intent intent = new Intent(getActivity(), LateralQueueNavigationActivity.class);
+		intent.putExtra(QUEUE_ID_KEY, queue.getId());
+		intent.putExtra(QUEUE_NAME_KEY, queue.getName());
+		startActivity(intent);
+	}
+	
+	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
 	public Loader<List<Queue>> onCreateLoader(int arg0, Bundle arg1)
@@ -85,16 +104,5 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 	public void onLoaderReset(Loader<List<Queue>> loader)
 	{
 		adapter.setData(null);
-	}
-
-	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id)
-	{
-		Queue queue = (Queue) listView.getItemAtPosition(position);
-
-		Intent intent = new Intent(getActivity(), LateralQueueNavigationActivity.class);
-		intent.putExtra(QUEUE_ID_KEY, queue.getId());
-		intent.putExtra(QUEUE_NAME_KEY, queue.getName());
-		startActivity(intent);
 	}
 }

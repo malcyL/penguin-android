@@ -11,19 +11,14 @@ import android.widget.TextView;
 
 public class QueueAdapter extends ArrayAdapter<Queue>
 {
+	// constructors -----------------------------------------------------------
+	
 	public QueueAdapter(Context context, int textViewResourceId)
 	{
 		super(context, textViewResourceId);
 	}
-
-	public void setData(List<Queue> data)
-	{
-		clear();
-		if (data != null)
-		{
-			addAll(data);
-		}
-	}
+	
+	// Adapter methods --------------------------------------------------------
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -34,5 +29,16 @@ public class QueueAdapter extends ArrayAdapter<Queue>
 		((TextView) view).setText(item.getName());
 
 		return view;
+	}
+	
+	// public methods ---------------------------------------------------------
+
+	public void setData(List<Queue> data)
+	{
+		clear();
+		if (data != null)
+		{
+			addAll(data);
+		}
 	}
 }

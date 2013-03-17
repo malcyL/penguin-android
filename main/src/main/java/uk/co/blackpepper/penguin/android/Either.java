@@ -5,6 +5,8 @@ package uk.co.blackpepper.penguin.android;
  */
 abstract class Either<L, R>
 {
+	// public methods ---------------------------------------------------------
+	
 	public boolean isLeft()
 	{
 		return false;

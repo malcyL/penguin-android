@@ -6,16 +6,22 @@ import android.preference.PreferenceManager;
 
 final class PreferenceUtils
 {
+	// constants --------------------------------------------------------------
+	
 	public static final String SERVER_URL_KEY = "penguin_server_url";
 	
 	public static final String AUTHOR_NAME_KEY = "display_name";
 	
 	private static final String API_PATH = "/api";
+	
+	// constructors -----------------------------------------------------------
 
 	private PreferenceUtils()
 	{
 		throw new AssertionError();
 	}
+	
+	// public methods ---------------------------------------------------------
 	
 	public static String getServerApiUrl(Context context)
 	{

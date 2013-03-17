@@ -18,86 +18,8 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the three primary
-	 * sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep
-	 * every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	private AppSectionsPagerAdapter appSectionsPagerAdapter;
-
-	/**
-	 * The {@link ViewPager} that will display the three primary sections of the app, one at a time.
-	 */
-	private ViewPager viewPager;
-
-	private boolean created;
-
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
-		// The main activity is not created until a server is configured.
-		// Creation which would normally be done here is performed in onResume if
-		// a server has been configued.
-		created = false;
-	}
-
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-	}
-
-	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-		// When the given tab is selected, switch to the corresponding page in the ViewPager.
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-
-		if (!isServerUrlConfigured())
-		{
-			displaySettings();
-		}
-		else if (!created)
-		{
-			create();
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.queue_list_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-			case R.id.menu_settings:
-				Intent settingsIntent = new Intent(this, SettingsActivity.class);
-				startActivity(settingsIntent);
-				return true;
-
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
-
+	// types ------------------------------------------------------------------
+	
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary sections of the app.
 	 */
@@ -178,6 +100,97 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			return rootView;
 		}
 	}
+	
+	// fields -----------------------------------------------------------------
+	
+	/**
+	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the three primary
+	 * sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep
+	 * every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a
+	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+	 */
+	private AppSectionsPagerAdapter appSectionsPagerAdapter;
+
+	/**
+	 * The {@link ViewPager} that will display the three primary sections of the app, one at a time.
+	 */
+	private ViewPager viewPager;
+
+	private boolean created;
+	
+	// FragmentActivity methods -----------------------------------------------
+
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		// The main activity is not created until a server is configured.
+		// Creation which would normally be done here is performed in onResume if
+		// a server has been configued.
+		created = false;
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		if (!isServerUrlConfigured())
+		{
+			displaySettings();
+		}
+		else if (!created)
+		{
+			create();
+		}
+	}
+	
+	// Activity methods -------------------------------------------------------
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.queue_list_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.menu_settings:
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				startActivity(settingsIntent);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	// TabListener methods ----------------------------------------------------
+
+	@Override
+	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+	{
+	}
+
+	@Override
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+	{
+		// When the given tab is selected, switch to the corresponding page in the ViewPager.
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+	{
+	}
+
+	// private methods --------------------------------------------------------
 
 	/**
 	 * create activity.

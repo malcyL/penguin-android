@@ -12,19 +12,14 @@ import android.widget.TextView;
 
 public class StoryAdapter extends ArrayAdapter<Story>
 {
+	// constructors -----------------------------------------------------------
+	
 	public StoryAdapter(Context context, int textViewResourceId)
 	{
 		super(context, textViewResourceId);
 	}
 
-	public void setData(List<Story> data)
-	{
-		clear();
-		if (data != null)
-		{
-			addAll(data);
-		}
-	}
+	// Adapter methods --------------------------------------------------------
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -46,5 +41,16 @@ public class StoryAdapter extends ArrayAdapter<Story>
 		}
 
 		return view;
+	}
+
+	// public methods ---------------------------------------------------------
+
+	public void setData(List<Story> data)
+	{
+		clear();
+		if (data != null)
+		{
+			addAll(data);
+		}
 	}
 }
