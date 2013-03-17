@@ -60,7 +60,7 @@ public class SettingsActivity extends PreferenceActivity
 			public boolean onPreferenceChange(Preference preference, Object newValue)
 			{
 				String newServerUrl = newValue.toString();
-				boolean valid = validServerUrl(newServerUrl);
+				boolean valid = isUrl(newServerUrl);
 				
 				if (valid)
 				{
@@ -76,14 +76,14 @@ public class SettingsActivity extends PreferenceActivity
 		});
 	}
 
-	private boolean validServerUrl(String serverUrl)
+	private static boolean isUrl(String url)
 	{
 		try
 		{
-			new URL(serverUrl);
+			new URL(url);
 			return true;
 		}
-		catch (MalformedURLException e)
+		catch (MalformedURLException exception)
 		{
 			return false;
 		}
