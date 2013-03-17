@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary sections of the app.
  */
-public class AppSectionsPagerAdapter extends FragmentPagerAdapter
+public class MainPagerAdapter extends FragmentPagerAdapter
 {
 	// constructors -----------------------------------------------------------
 	
-	public AppSectionsPagerAdapter(FragmentManager fm)
+	public MainPagerAdapter(FragmentManager fm)
 	{
 		super(fm);
 	}
