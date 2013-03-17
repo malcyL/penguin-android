@@ -11,9 +11,13 @@ import android.widget.EditText;
 
 public class QueueEditDialogFragment extends DialogFragment
 {
+	// constants --------------------------------------------------------------
+	
 	public static final String ID = "id";
 	
 	public static final String NAME = "name";
+	
+	// DialogFragment methods -------------------------------------------------
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -38,6 +42,8 @@ public class QueueEditDialogFragment extends DialogFragment
 			.setNegativeButton(R.string.cancel, null)
 			.create();
 	}
+	
+	// private methods --------------------------------------------------------
 	
 	private static void renameQueue(String id, String newName)
 	{
