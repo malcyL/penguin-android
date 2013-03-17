@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 final class PreferenceUtils
 {
-	public static final String PENGUIN_SERVER_URL_KEY = "penguin_server_url";
+	public static final String SERVER_URL_KEY = "penguin_server_url";
 	
 	public static final String AUTHOR_NAME_KEY = "display_name";
 	
@@ -25,7 +25,7 @@ final class PreferenceUtils
 	public static String getServerUrl(Context context)
 	{
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String serverUrl = sharedPrefs.getString(PENGUIN_SERVER_URL_KEY, null);
+		String serverUrl = sharedPrefs.getString(SERVER_URL_KEY, null);
 		return serverUrl;
 	}
 }

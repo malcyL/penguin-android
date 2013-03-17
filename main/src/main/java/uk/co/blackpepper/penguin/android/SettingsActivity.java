@@ -1,13 +1,14 @@
 package uk.co.blackpepper.penguin.android;
 
 import static uk.co.blackpepper.penguin.android.PreferenceUtils.AUTHOR_NAME_KEY;
-import static uk.co.blackpepper.penguin.android.PreferenceUtils.PENGUIN_SERVER_URL_KEY;
+import static uk.co.blackpepper.penguin.android.PreferenceUtils.SERVER_URL_KEY;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import uk.co.blackpepper.penguin.R;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -29,18 +30,21 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupAuthorNamePreference()
 	{
-		EditTextPreference authorNamePref = (EditTextPreference) getPreferenceScreen().findPreference(AUTHOR_NAME_KEY);
 		String defaultAuthorName = getResources().getString(R.string.pref_default_display_name);
-		authorNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_KEY,
-			defaultAuthorName));
+		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String authorName = sharedPreferences.getString(AUTHOR_NAME_KEY, defaultAuthorName);
+		
+		EditTextPreference authorNamePref = (EditTextPreference) getPreferenceScreen().findPreference(AUTHOR_NAME_KEY);
+		authorNamePref.setSummary(authorName);
 
 		authorNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
 		{
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue)
 			{
-				String stringValue = newValue.toString();
-				preference.setSummary(stringValue);
+				String newAuthorName = newValue.toString();
+				preference.setSummary(newAuthorName);
 				return true;
 			}
 		});
@@ -48,11 +52,13 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupServerUrlPreference(final Context context)
 	{
-		EditTextPreference serverUrlPref = (EditTextPreference) getPreferenceScreen()
-			.findPreference(PENGUIN_SERVER_URL_KEY);
 		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
-		serverUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_KEY,
-			defaultServerUrl));
+		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String serverUrl = sharedPreferences.getString(SERVER_URL_KEY, defaultServerUrl);
+		
+		EditTextPreference serverUrlPref = (EditTextPreference) getPreferenceScreen().findPreference(SERVER_URL_KEY);
+		serverUrlPref.setSummary(serverUrl);
 
 		serverUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
 		{
