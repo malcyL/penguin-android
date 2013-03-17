@@ -20,8 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class QueueListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Queue>>
+public class QueueListActivity extends ListActivity
+	implements LoaderManager.LoaderCallbacks<Either<List<Queue>, ServiceException>>
 {
 	private static final String TAG = QueueListActivity.class.getName();
 
@@ -72,9 +74,9 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 	}
 
 	@Override
-	public Loader<List<Queue>> onCreateLoader(int id, Bundle args)
+	public Loader<Either<List<Queue>, ServiceException>> onCreateLoader(int id, Bundle args)
 	{
-		return new AsyncTaskLoader<List<Queue>>(this)
+		return new AsyncTaskLoader<Either<List<Queue>, ServiceException>>(this)
 		{
 			@Override
 			protected void onStartLoading()
@@ -83,30 +85,37 @@ public class QueueListActivity extends ListActivity implements LoaderManager.Loa
 			}
 
 			@Override
-			public List<Queue> loadInBackground()
+			public Either<List<Queue>, ServiceException> loadInBackground()
 			{
 				try
 				{
-					return queueService.getAll();
+					return Either.left(queueService.getAll());
 				}
-				catch (ServiceException e)
+				catch (ServiceException exception)
 				{
-					// TODO Handle Properly
-					Log.e(TAG, "Error Loading Queues", e);
-					return null;
+					return Either.right(exception);
 				}
 			}
 		};
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<Queue>> loader, List<Queue> data)
+	public void onLoadFinished(Loader<Either<List<Queue>, ServiceException>> loader,
+		Either<List<Queue>, ServiceException> data)
 	{
-		adapter.setData(data);
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(this, R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error loading queues", data.right());
+		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<Queue>> loader)
+	public void onLoaderReset(Loader<Either<List<Queue>, ServiceException>> loader)
 	{
 		adapter.setData(null);
 	}

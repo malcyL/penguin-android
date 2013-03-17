@@ -18,8 +18,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-public class QueueActivity extends ListActivity implements LoaderManager.LoaderCallbacks<List<Story>>
+public class QueueActivity extends ListActivity
+	implements LoaderManager.LoaderCallbacks<Either<List<Story>, ServiceException>>
 {
 	// constants --------------------------------------------------------------
 	
@@ -82,9 +84,9 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
-	public Loader<List<Story>> onCreateLoader(int id, Bundle args)
+	public Loader<Either<List<Story>, ServiceException>> onCreateLoader(int id, Bundle args)
 	{
-		return new AsyncTaskLoader<List<Story>>(this)
+		return new AsyncTaskLoader<Either<List<Story>, ServiceException>>(this)
 		{
 			@Override
 			protected void onStartLoading()
@@ -93,29 +95,37 @@ public class QueueActivity extends ListActivity implements LoaderManager.LoaderC
 			}
 			
 			@Override
-			public List<Story> loadInBackground()
+			public Either<List<Story>, ServiceException> loadInBackground()
 			{
 				try
 				{
-					return storyService.getAll(queueId);
+					return Either.left(storyService.getAll(queueId));
 				}
 				catch (ServiceException exception)
 				{
-					Log.e(TAG, "Error loading stories for queue: " + queueId, exception);
-					return null;
+					return Either.right(exception);
 				}
 			}
 		};
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<Story>> loader, List<Story> stories)
+	public void onLoadFinished(Loader<Either<List<Story>, ServiceException>> loader,
+		Either<List<Story>, ServiceException> data)
 	{
-		adapter.setData(stories);
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(this, R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error loading stories for queue: " + queueId, data.right());
+		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<Story>> loader)
+	public void onLoaderReset(Loader<Either<List<Story>, ServiceException>> loader)
 	{
 		adapter.setData(null);
 		setTitle(R.string.title_activity_queue);

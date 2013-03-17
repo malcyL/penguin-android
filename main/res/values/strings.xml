@@ -9,5 +9,7 @@
     <string name="dialog_queue_edit">Rename Queue</string>
     <string name="rename">Rename</string>
     <string name="cancel">Cancel</string>
+    
+    <string name="toast_service_error">Error communicating with server</string>
 
 </resources>
