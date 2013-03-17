@@ -11,17 +11,17 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 {
 	// constructors -----------------------------------------------------------
 	
-	public MainPagerAdapter(FragmentManager fm)
+	public MainPagerAdapter(FragmentManager fragmentManager)
 	{
-		super(fm);
+		super(fragmentManager);
 	}
 
 	// FragmentStatePagerAdapter methods --------------------------------------
 
 	@Override
-	public Fragment getItem(int i)
+	public Fragment getItem(int position)
 	{
-		switch (i)
+		switch (position)
 		{
 			case 0:
 				return new QueuesFragment();
@@ -30,9 +30,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 				return new PenguinsListFragment();
 
 			default:
-				// This is an error really and should never happen. Until I know how to deal with that, return Queue
-				// List
-				return new QueuesFragment();
+				throw new IllegalArgumentException("position: " + position);
 		}
 	}
 
@@ -58,8 +56,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 				return "Penguins";
 
 			default:
-				// TODO This shouldn't happen. How do we handle the error?
-				return null;
+				throw new IllegalArgumentException("position: " + position);
 		}
 	}
 }

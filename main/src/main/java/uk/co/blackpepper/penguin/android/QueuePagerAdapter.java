@@ -12,9 +12,9 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 {
 	// constructors -----------------------------------------------------------
 	
-	public QueuePagerAdapter(FragmentManager fm)
+	public QueuePagerAdapter(FragmentManager fragmentManager)
 	{
-		super(fm);
+		super(fragmentManager);
 	}
 	
 	// FragmentStatePagerAdapter methods --------------------------------------
@@ -31,8 +31,7 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 				return new MergedStoriesFragment();
 				
 			default:
-				// TODO This shouldn't happen. How do we handle the error?
-				return null;
+				throw new IllegalArgumentException("position: " + position);
 		}
 	}
 	
@@ -41,7 +40,6 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 	@Override
 	public int getCount()
 	{
-		// For this contrived example, we have a 100-object collection.
 		return 2;
 	}
 
@@ -53,12 +51,13 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 			case 0:
 				// TODO This should come from strings.xml
 				return "Pending";
+				
 			case 1:
 				// TODO This should come from strings.xml
 				return "Merged";
+				
 			default:
-				// TODO This shouldn't happen. How do we handle the error?
-				return null;
+				throw new IllegalArgumentException("position: " + position);
 		}
 	}
 }
