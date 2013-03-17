@@ -29,12 +29,12 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupAuthorNamePreference()
 	{
-		EditTextPreference autorUrlPref = (EditTextPreference) getPreferenceScreen().findPreference(AUTHOR_NAME_KEY);
+		EditTextPreference authorNamePref = (EditTextPreference) getPreferenceScreen().findPreference(AUTHOR_NAME_KEY);
 		String defaultAuthorName = getResources().getString(R.string.pref_default_display_name);
-		autorUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_KEY,
+		authorNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(AUTHOR_NAME_KEY,
 			defaultAuthorName));
 
-		autorUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
+		authorNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
 		{
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue)
@@ -48,13 +48,13 @@ public class SettingsActivity extends PreferenceActivity
 
 	private void setupServerUrlPreference(final Context context)
 	{
-		EditTextPreference serverNamePref = (EditTextPreference) getPreferenceScreen()
+		EditTextPreference serverUrlPref = (EditTextPreference) getPreferenceScreen()
 			.findPreference(PENGUIN_SERVER_URL_KEY);
 		String defaultServerUrl = getResources().getString(R.string.pref_default_server_url);
-		serverNamePref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_KEY,
+		serverUrlPref.setSummary(PreferenceManager.getDefaultSharedPreferences(this).getString(PENGUIN_SERVER_URL_KEY,
 			defaultServerUrl));
 
-		serverNamePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
+		serverUrlPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
 		{
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue)
