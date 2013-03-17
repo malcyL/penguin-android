@@ -15,7 +15,7 @@
     <EditTextPreference
         android:capitalize="words"
         android:defaultValue="@string/pref_default_server_url"
-        android:inputType="textCapWords"
+        android:inputType="textUri"
         android:key="penguin_server_url"
         android:maxLines="1"
         android:selectAllOnFocus="true"
