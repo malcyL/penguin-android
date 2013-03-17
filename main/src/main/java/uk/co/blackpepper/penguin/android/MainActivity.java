@@ -1,10 +1,12 @@
 package uk.co.blackpepper.penguin.android;
 
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,17 +15,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 {
 	// fields -----------------------------------------------------------------
 	
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the three primary
-	 * sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep
-	 * every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	private MainPagerAdapter appSectionsPagerAdapter;
+	private PagerAdapter pagerAdapter;
 
-	/**
-	 * The {@link ViewPager} that will display the three primary sections of the app, one at a time.
-	 */
 	private ViewPager viewPager;
 
 	private boolean created;
@@ -91,7 +84,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
 	{
-		// When the given tab is selected, switch to the corresponding page in the ViewPager.
 		viewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -110,43 +102,36 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	 */
 	private void create()
 	{
-		// Create the adapter that will return a fragment for each of the three primary sections
-		// of the app.
-		appSectionsPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+		pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
 
-		// Set up the action bar.
+		// configure action bar
+		
 		final ActionBar actionBar = getActionBar();
-
-		// Specify that the Home/Up button should not be enabled, since there is no hierarchical
-		// parent.
 		actionBar.setHomeButtonEnabled(false);
-
-		// Specify that we will be displaying tabs in the action bar.
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		// Set up the ViewPager, attaching the adapter and setting up a listener for when the
-		// user swipes between sections.
+		// configure view pager
+		
 		viewPager = (ViewPager) findViewById(R.id.pager);
-		viewPager.setAdapter(appSectionsPagerAdapter);
+		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
 		{
 			@Override
 			public void onPageSelected(int position)
 			{
-				// When swiping between different app sections, select the corresponding tab.
-				// We can also use ActionBar.Tab#select() to do this if we have a reference to the
-				// Tab.
 				actionBar.setSelectedNavigationItem(position);
 			}
 		});
+		
+		// add tabs
 
-		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < appSectionsPagerAdapter.getCount(); i++)
+		for (int i = 0; i < pagerAdapter.getCount(); i++)
 		{
-			// Create a tab with text corresponding to the page title defined by the adapter.
-			// Also specify this Activity object, which implements the TabListener interface, as the
-			// listener for when this tab is selected.
-			actionBar.addTab(actionBar.newTab().setText(appSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+			Tab tab = actionBar.newTab()
+				.setText(pagerAdapter.getPageTitle(i))
+				.setTabListener(this);
+			
+			actionBar.addTab(tab);
 		}
 
 		created = true;
