@@ -13,17 +13,17 @@ public class QueueEditDialogFragment extends DialogFragment
 {
 	// constants --------------------------------------------------------------
 	
-	public static final String ID = "id";
+	public static final String ID_KEY = "id";
 	
-	public static final String NAME = "name";
+	public static final String NAME_KEY = "name";
 	
 	// DialogFragment methods -------------------------------------------------
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
-		final String id = getArguments().getString(ID);
-		String name = getArguments().getString(NAME);
+		final String id = getArguments().getString(ID_KEY);
+		String name = getArguments().getString(NAME_KEY);
 		
 		final EditText view = new EditText(getActivity());
 		view.setText(name);

@@ -102,8 +102,8 @@ public class QueueActivity extends FragmentActivity
 		QueueEditDialogFragment fragment = new QueueEditDialogFragment();
 
 		Bundle arguments = new Bundle();
-		arguments.putString(QueueEditDialogFragment.ID, queueId);
-		arguments.putString(QueueEditDialogFragment.NAME, queueName);
+		arguments.putString(QueueEditDialogFragment.ID_KEY, queueId);
+		arguments.putString(QueueEditDialogFragment.NAME_KEY, queueName);
 		fragment.setArguments(arguments);
 
 		fragment.show(getFragmentManager(), "queueEdit");
