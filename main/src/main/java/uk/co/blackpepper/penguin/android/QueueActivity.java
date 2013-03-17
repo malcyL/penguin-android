@@ -27,7 +27,7 @@ public class QueueActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_lateral_queue_navigation);
+		setContentView(R.layout.activity_queue);
 
 		queueName = getIntent().getExtras().getString(QueueListFragment.QUEUE_NAME_KEY);
 		setTitle(queueName);

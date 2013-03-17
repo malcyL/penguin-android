@@ -16,7 +16,7 @@ public class QueuesFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_queues, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_queue_list, container, false);
 		return rootView;
 	}
 }

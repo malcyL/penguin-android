@@ -16,7 +16,7 @@ public class MergedStoriesFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View viewRoot = inflater.inflate(R.layout.fragment_stories_merged, container, false);
+		View viewRoot = inflater.inflate(R.layout.fragment_story_list_merged, container, false);
 		return viewRoot;
 	}
 }
