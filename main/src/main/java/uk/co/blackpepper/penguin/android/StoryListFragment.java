@@ -40,16 +40,8 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		if (getId() == R.id.merged_story_list_fragment)
-		{
-			merged = true;
-		}
-		else
-		{
-			merged = false;
-		}
-
 		queueId = getActivity().getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
+		merged = (getId() == R.id.merged_story_list_fragment);
 
 		storyService = new HttpClientStoryService(new DefaultHttpClient(),
 			PreferenceUtils.getServerApiUrl(inflater.getContext()));
