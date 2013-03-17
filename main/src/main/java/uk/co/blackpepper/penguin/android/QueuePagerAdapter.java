@@ -1,5 +1,6 @@
 package uk.co.blackpepper.penguin.android;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -25,10 +26,10 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 		switch (position)
 		{
 			case 0:
-				return new UnmergedStoriesFragment();
+				return createStoryListFragment(false);
 				
 			case 1:
-				return new MergedStoriesFragment();
+				return createStoryListFragment(true);
 				
 			default:
 				throw new IllegalArgumentException("position: " + position);
@@ -59,5 +60,18 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 			default:
 				throw new IllegalArgumentException("position: " + position);
 		}
+	}
+	
+	// private methods --------------------------------------------------------
+	
+	private static Fragment createStoryListFragment(boolean merged)
+	{
+		Fragment fragment = new StoryListFragment();
+		
+		Bundle arguments = new Bundle();
+		arguments.putBoolean(StoryListFragment.MERGED_KEY, merged);
+		fragment.setArguments(arguments);
+		
+		return fragment;
 	}
 }

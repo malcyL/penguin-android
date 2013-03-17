@@ -24,6 +24,8 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 {
 	// constants --------------------------------------------------------------
 	
+	public static final String MERGED_KEY = "merged";
+	
 	private static final String TAG = StoryListFragment.class.getName();
 	
 	// fields -----------------------------------------------------------------
@@ -42,7 +44,7 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		queueId = getActivity().getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
-		merged = (getId() == R.id.merged_story_list_fragment);
+		merged = getArguments().getBoolean(MERGED_KEY);
 
 		storyService = new HttpClientStoryService(new DefaultHttpClient(),
 			PreferenceUtils.getServerApiUrl(inflater.getContext()));
