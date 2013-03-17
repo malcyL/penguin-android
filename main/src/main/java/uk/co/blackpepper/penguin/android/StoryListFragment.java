@@ -71,7 +71,7 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 					if (merged) {
 						return storyService.getMerged(queueId);						
 					} else {
-						return storyService.getUnMerged(queueId);						
+						return storyService.getUnmerged(queueId);						
 					}
 				}
 				catch (ServiceException e)
