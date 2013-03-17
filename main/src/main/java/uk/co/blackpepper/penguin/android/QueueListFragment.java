@@ -21,30 +21,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class QueueListFragment extends ListFragment implements LoaderCallbacks<List<Queue>> {
-	
+public class QueueListFragment extends ListFragment implements LoaderCallbacks<List<Queue>>
+{
 	public static String QUEUE_ID_KEY = "id";
-	
+
 	public static String QUEUE_NAME_KEY = "queueName";
-	
+
 	private static final String TAG = QueueListFragment.class.getName();
-	
-    private QueueService queueService;
+
+	private QueueService queueService;
 
 	private QueueAdapter adapter;
 
-	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		queueService = new HttpClientQueueService(new DefaultHttpClient(),
+			PreferenceUtils.getServerApiUrl(inflater.getContext()));
 
-		queueService = new HttpClientQueueService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(inflater.getContext()));
-		
 		adapter = new QueueAdapter(inflater.getContext(), android.R.layout.simple_list_item_1);
 		setListAdapter(adapter);
-		
+
 		getLoaderManager().initLoader(0, null, this);
 
-		return super.onCreateView(inflater, container, savedInstanceState);		
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@Override
@@ -91,11 +91,10 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 	public void onListItemClick(ListView listView, View view, int position, long id)
 	{
 		Queue queue = (Queue) listView.getItemAtPosition(position);
-		
+
 		Intent intent = new Intent(getActivity(), LateralQueueNavigationActivity.class);
 		intent.putExtra(QUEUE_ID_KEY, queue.getId());
 		intent.putExtra(QUEUE_NAME_KEY, queue.getName());
 		startActivity(intent);
 	}
-	
 }

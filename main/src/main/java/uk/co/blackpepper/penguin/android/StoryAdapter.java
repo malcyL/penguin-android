@@ -31,15 +31,18 @@ public class StoryAdapter extends ArrayAdapter<Story>
 	{
 		View view = super.getView(position, convertView, parent);
 		TextView textView = (TextView) view;
-		
+
 		Story story = getItem(position);
 		String text = String.format("%s - %s", story.getReference(), story.getAuthor());
 		textView.setText(text);
-		
-		if (story.isMerged()) {
+
+		if (story.isMerged())
+		{
 			textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-		} else {
-			textView.setPaintFlags(textView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));			
+		}
+		else
+		{
+			textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 		}
 
 		return view;

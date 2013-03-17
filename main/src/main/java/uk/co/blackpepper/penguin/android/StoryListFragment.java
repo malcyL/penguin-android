@@ -19,37 +19,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class StoryListFragment extends ListFragment implements LoaderCallbacks<List<Story>> {
-	
+public class StoryListFragment extends ListFragment implements LoaderCallbacks<List<Story>>
+{
 	private static final String TAG = StoryListFragment.class.getName();
-	
-    private StoryService storyService;
+
+	private StoryService storyService;
 
 	private StoryAdapter adapter;
 
 	private String queueId;
 
 	private boolean merged;
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {	
-		
-		if (getId() == R.id.merged_story_list_fragment) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (getId() == R.id.merged_story_list_fragment)
+		{
 			merged = true;
-		} else {
+		}
+		else
+		{
 			merged = false;
 		}
-		
+
 		queueId = getActivity().getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
-		
-		storyService = new HttpClientStoryService(new DefaultHttpClient(), PreferenceUtils.getServerApiUrl(inflater.getContext()));
-		
+
+		storyService = new HttpClientStoryService(new DefaultHttpClient(),
+			PreferenceUtils.getServerApiUrl(inflater.getContext()));
+
 		adapter = new StoryAdapter(inflater.getContext(), android.R.layout.simple_list_item_1);
 		setListAdapter(adapter);
-		
+
 		getLoaderManager().initLoader(0, null, this);
 
-		return super.onCreateView(inflater, container, savedInstanceState);		
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@Override
@@ -68,10 +72,13 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 			{
 				try
 				{
-					if (merged) {
-						return storyService.getMerged(queueId);						
-					} else {
-						return storyService.getUnmerged(queueId);						
+					if (merged)
+					{
+						return storyService.getMerged(queueId);
+					}
+					else
+					{
+						return storyService.getUnmerged(queueId);
 					}
 				}
 				catch (ServiceException e)
@@ -95,5 +102,4 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 	{
 		adapter.setData(null);
 	}
-
 }
