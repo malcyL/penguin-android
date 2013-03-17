@@ -1,6 +1,5 @@
 package uk.co.blackpepper.penguin.android;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -18,8 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-public class StoryListFragment extends ListFragment implements LoaderCallbacks<List<Story>>
+public class StoryListFragment extends ListFragment implements LoaderCallbacks<Either<List<Story>, ServiceException>>
 {
 	// constants --------------------------------------------------------------
 	
@@ -65,9 +65,9 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
-	public Loader<List<Story>> onCreateLoader(int id, Bundle args)
+	public Loader<Either<List<Story>, ServiceException>> onCreateLoader(int id, Bundle args)
 	{
-		return new AsyncTaskLoader<List<Story>>(getActivity())
+		return new AsyncTaskLoader<Either<List<Story>, ServiceException>>(getActivity())
 		{
 			@Override
 			protected void onStartLoading()
@@ -76,37 +76,38 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<L
 			}
 
 			@Override
-			public List<Story> loadInBackground()
+			public Either<List<Story>, ServiceException> loadInBackground()
 			{
 				try
 				{
-					if (merged)
-					{
-						return storyService.getMerged(queueId);
-					}
-					else
-					{
-						return storyService.getUnmerged(queueId);
-					}
+					List<Story> stories = merged ? storyService.getMerged(queueId) : storyService.getUnmerged(queueId);
+					return Either.left(stories);
 				}
-				catch (ServiceException e)
+				catch (ServiceException exception)
 				{
-					// TODO Handle Properly
-					Log.e(TAG, "Error Loading Stories", e);
-					return new ArrayList<Story>();
+					return Either.right(exception);
 				}
 			}
 		};
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<Story>> loader, List<Story> data)
+	public void onLoadFinished(Loader<Either<List<Story>, ServiceException>> loader,
+		Either<List<Story>, ServiceException> data)
 	{
-		adapter.setData(data);
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error loading stories for queue: " + queueId, data.right());
+		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<Story>> loader)
+	public void onLoaderReset(Loader<Either<List<Story>, ServiceException>> loader)
 	{
 		adapter.setData(null);
 	}

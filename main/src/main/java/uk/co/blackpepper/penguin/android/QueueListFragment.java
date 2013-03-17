@@ -1,6 +1,5 @@
 package uk.co.blackpepper.penguin.android;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -20,8 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class QueueListFragment extends ListFragment implements LoaderCallbacks<List<Queue>>
+public class QueueListFragment extends ListFragment implements LoaderCallbacks<Either<List<Queue>, ServiceException>>
 {
 	// constants --------------------------------------------------------------
 	
@@ -67,9 +67,9 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
-	public Loader<List<Queue>> onCreateLoader(int id, Bundle args)
+	public Loader<Either<List<Queue>, ServiceException>> onCreateLoader(int id, Bundle args)
 	{
-		return new AsyncTaskLoader<List<Queue>>(getActivity())
+		return new AsyncTaskLoader<Either<List<Queue>, ServiceException>>(getActivity())
 		{
 			@Override
 			protected void onStartLoading()
@@ -78,30 +78,37 @@ public class QueueListFragment extends ListFragment implements LoaderCallbacks<L
 			}
 
 			@Override
-			public List<Queue> loadInBackground()
+			public Either<List<Queue>, ServiceException> loadInBackground()
 			{
 				try
 				{
-					return queueService.getAll();
+					return Either.left(queueService.getAll());
 				}
-				catch (ServiceException e)
+				catch (ServiceException exception)
 				{
-					// TODO Handle Properly
-					Log.e(TAG, "Error Loading Queues", e);
-					return new ArrayList<Queue>();
+					return Either.right(exception);
 				}
 			}
 		};
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<Queue>> loader, List<Queue> data)
+	public void onLoadFinished(Loader<Either<List<Queue>, ServiceException>> loader,
+		Either<List<Queue>, ServiceException> data)
 	{
-		adapter.setData(data);
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error loading queues", data.right());
+		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<Queue>> loader)
+	public void onLoaderReset(Loader<Either<List<Queue>, ServiceException>> loader)
 	{
 		adapter.setData(null);
 	}
