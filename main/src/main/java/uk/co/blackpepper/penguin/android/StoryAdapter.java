@@ -38,25 +38,29 @@ public class StoryAdapter extends ArrayAdapter<Story>
 
 		Story story = getItem(position);
 		
-		TextView titleTextView = (TextView) view.findViewById(R.id.title);
-		String text = String.format("%s - %s", story.getReference(), story.getAuthor());
-		titleTextView.setText(text);
+		TextView authorTextView = (TextView) view.findViewById(R.id.title);
+		authorTextView.setText(story.getAuthor());
 
 		TextView subTitleTextView = (TextView) view.findViewById(R.id.sub_title);
 		subTitleTextView.setText(story.getTitle());
 
-		ImageView imageView = (ImageView) view.findViewById(R.id.logo);
+		TextView referenceTextView = (TextView) view.findViewById(R.id.note);
+		referenceTextView.setText(story.getReference());
+
+		ImageView imageView = (ImageView) view.findViewById(R.id.thumbnail);
 		imageView.setImageResource(R.drawable.folder);
 		
 		if (story.isMerged())
 		{
-			titleTextView.setPaintFlags(titleTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			authorTextView.setPaintFlags(authorTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 			subTitleTextView.setPaintFlags(subTitleTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			referenceTextView.setPaintFlags(subTitleTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 		}
 		else
 		{
-			titleTextView.setPaintFlags(titleTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+			authorTextView.setPaintFlags(authorTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 			subTitleTextView.setPaintFlags(subTitleTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+			referenceTextView.setPaintFlags(subTitleTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 		}
 
 		return view;
