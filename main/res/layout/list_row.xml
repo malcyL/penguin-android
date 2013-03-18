@@ -27,7 +27,7 @@
         android:layout_alignTop="@+id/thumbnail_layout"
         android:layout_toRightOf="@+id/thumbnail_layout"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
  
     <TextView
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:textColor="?android:attr/textColorTertiary"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail_layout" />
  
@@ -48,7 +48,7 @@
         android:layout_alignTop="@id/title"
         android:gravity="right"
         android:layout_marginRight="5dip"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="?android:attr/textColorTertiary"
         android:textStyle="bold"/>
  

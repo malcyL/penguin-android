@@ -16,4 +16,5 @@
     <string name="title_activity_penguin">Penguin</string>
     <string name="coming_soon">Coming Soon!</string>
     
+    <string name="queue_list_item_pending">Pending Stories: </string>
 </resources>
