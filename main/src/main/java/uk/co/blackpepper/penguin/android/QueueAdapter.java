@@ -36,6 +36,7 @@ public class QueueAdapter extends ArrayAdapter<Queue>
 		View view = inflater.inflate(R.layout.list_row, parent, false);
 		
 		Queue queue = getItem(position);
+		int pendingCount = queue.getPendingCount(); 
 
 		TextView authorTextView = (TextView) view.findViewById(R.id.title);
 		authorTextView.setText(queue.getName());
@@ -43,10 +44,29 @@ public class QueueAdapter extends ArrayAdapter<Queue>
 		TextView subTitleTextView = (TextView) view.findViewById(R.id.sub_title);
 		subTitleTextView.setText(
 			context.getResources().getString(R.string.queue_list_item_pending) + " " + 
-			queue.getPendingCount());
-
+			pendingCount);
+		
+		int image = R.drawable.user_none;
+		switch (pendingCount) 
+		{
+			case 0:
+				image = R.drawable.user_none;
+				break;
+			case 1:
+				image = R.drawable.user_one;
+				break;
+			case 2:
+				image = R.drawable.user_two;
+				break;
+			case 3:
+				image = R.drawable.user_three;
+				break;
+			default:
+				image = R.drawable.user_more;
+		}
+		
 		ImageView imageView = (ImageView) view.findViewById(R.id.thumbnail);
-		imageView.setImageResource(R.drawable.ic_launcher);
+		imageView.setImageResource(image);
 		
 		return view;
 	}
