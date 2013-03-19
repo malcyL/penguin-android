@@ -34,7 +34,7 @@ public class StoryAdapter extends ArrayAdapter<Story>
 	{
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.list_row, parent, false);
+		View view = inflater.inflate(R.layout.list_row_selectable, parent, false);
 
 		Story story = getItem(position);
 		
@@ -47,9 +47,6 @@ public class StoryAdapter extends ArrayAdapter<Story>
 		TextView referenceTextView = (TextView) view.findViewById(R.id.note);
 		referenceTextView.setText(story.getReference());
 
-		ImageView imageView = (ImageView) view.findViewById(R.id.thumbnail);
-		imageView.setImageResource(R.drawable.folder);
-		
 		if (story.isMerged())
 		{
 			authorTextView.setPaintFlags(authorTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
