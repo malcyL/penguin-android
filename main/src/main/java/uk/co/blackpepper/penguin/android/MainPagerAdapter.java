@@ -26,9 +26,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 			case 0:
 				return new QueueListFragment();
 
-			case 1:
-				return new PenguinListFragment();
-
 			default:
 				throw new IllegalArgumentException("position: " + position);
 		}
@@ -39,7 +36,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 	@Override
 	public int getCount()
 	{
-		return 2;
+		return 1;
 	}
 
 	@Override
@@ -50,10 +47,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter
 			case 0:
 				// TODO This should come from strings.xml
 				return "Queues";
-
-			case 1:
-				// TODO This should come from strings.xml
-				return "Penguins";
 
 			default:
 				throw new IllegalArgumentException("position: " + position);

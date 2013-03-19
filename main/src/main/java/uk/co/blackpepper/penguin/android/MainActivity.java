@@ -2,8 +2,6 @@ package uk.co.blackpepper.penguin.android;
 
 import uk.co.blackpepper.penguin.R;
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener
+public class MainActivity extends FragmentActivity 
 {
 	// fields -----------------------------------------------------------------
 	
@@ -75,24 +73,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		}
 	}
 	
-	// TabListener methods ----------------------------------------------------
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-	}
-
-	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-	{
-	}
-
 	// private methods --------------------------------------------------------
 
 	/**
@@ -109,31 +89,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// configure view pager
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
-		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-		{
-			@Override
-			public void onPageSelected(int position)
-			{
-				actionBar.setSelectedNavigationItem(position);
-			}
-		});
-		
-		// add tabs
-
-		for (int i = 0; i < pagerAdapter.getCount(); i++)
-		{
-			Tab tab = actionBar.newTab()
-				.setText(pagerAdapter.getPageTitle(i))
-				.setTabListener(this);
-			
-			actionBar.addTab(tab);
-		}
 
 		created = true;
 	}
