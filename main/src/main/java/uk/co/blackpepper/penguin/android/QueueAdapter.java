@@ -36,7 +36,7 @@ public class QueueAdapter extends ArrayAdapter<Queue>
 		View view = inflater.inflate(R.layout.list_row, parent, false);
 		
 		Queue queue = getItem(position);
-		int pendingCount = queue.getPendingCount(); 
+		int pendingCount = queue.getStoryCount(false);
 
 		TextView authorTextView = (TextView) view.findViewById(R.id.title);
 		authorTextView.setText(queue.getName());
