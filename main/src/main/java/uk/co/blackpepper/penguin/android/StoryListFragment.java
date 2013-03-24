@@ -9,6 +9,7 @@ import uk.co.blackpepper.penguin.client.ServiceException;
 import uk.co.blackpepper.penguin.client.Story;
 import uk.co.blackpepper.penguin.client.StoryService;
 import uk.co.blackpepper.penguin.client.httpclient.HttpClientStoryService;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -18,12 +19,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class StoryListFragment extends ListFragment implements LoaderCallbacks<Either<List<Story>, ServiceException>>
+public class StoryListFragment extends ListFragment 
+	implements LoaderCallbacks<Either<List<Story>, ServiceException>>, MergeTaskCompleted
 {
 	// constants --------------------------------------------------------------
 	
+	private static final int STORY_LIST_FRAGMENT = 1;
+
 	public static final String MERGED_KEY = "merged";
 	
 	private static final String TAG = StoryListFragment.class.getName();
@@ -37,6 +42,8 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 	private String queueId;
 
 	private boolean merged;
+
+	private MergeAsyncTask mergeTask; 
 	
 	// ListFragment methods ---------------------------------------------------
 
@@ -57,6 +64,33 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
+	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id)
+	{
+		Story story = (Story) listView.getItemAtPosition(position);
+		
+		MergeConfirmDialogFragment fragment = new MergeConfirmDialogFragment();
+
+		Bundle arguments = new Bundle();
+		arguments.putString(MergeConfirmDialogFragment.QUEUE_ID_KEY, queueId);
+		arguments.putString(MergeConfirmDialogFragment.STORY_ID_KEY, story.getId());
+		arguments.putString(MergeConfirmDialogFragment.STORY_REF_KEY, story.getReference());
+		fragment.setArguments(arguments);
+		
+		fragment.setTargetFragment(this, STORY_LIST_FRAGMENT);
+
+		fragment.show(getFragmentManager(), "merge");
+	}
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+ 
+        if (mergeTask != null) {
+        	mergeTask.cancel(true);
+        }
+    }
+ 	
 	// LoaderCallbacks methods ------------------------------------------------
 
 	@Override
@@ -105,5 +139,71 @@ public class StoryListFragment extends ListFragment implements LoaderCallbacks<E
 	public void onLoaderReset(Loader<Either<List<Story>, ServiceException>> loader)
 	{
 		adapter.setData(null);
+	}
+	
+	// Merge Async Task methods ------------------------------------------------
+
+	public void mergeConfirmed(String queueId, String storyId) 
+	{
+		mergeTask = new MergeAsyncTask(queueId, storyId, this);
+		mergeTask.execute();
+	}
+	
+	@Override
+	public void onTaskCompleted(Either<List<Story>, ServiceException> data)
+	{
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error merging story for queue: " + queueId, data.right());
+		}
+	}
+
+	private class MergeAsyncTask extends AsyncTask<Void, String, Either<List<Story>, ServiceException>> 
+	{
+		private final String queueId;
+		private final String storyId;
+		private final MergeTaskCompleted callback;
+
+		public MergeAsyncTask(String queueId, String storyId, MergeTaskCompleted callback)
+		{
+			this.queueId = queueId;
+			this.storyId = storyId;
+			this.callback = callback;
+		}
+
+		@Override
+		protected Either<List<Story>, ServiceException> doInBackground(Void... params)
+		{
+			try
+			{
+				storyService.merge(queueId, storyId);
+			}
+			catch (ServiceException e)
+			{
+				return Either.right(e);
+			}
+
+			// Reloading the list seems a bit inefficient, but it works as a first step.
+			try
+			{
+				List<Story> stories = merged ? storyService.getMerged(queueId) : storyService.getUnmerged(queueId);
+				return Either.left(stories);
+			}
+			catch (ServiceException exception)
+			{
+				return Either.right(exception);
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Either<List<Story>, ServiceException> result)
+		{
+			callback.onTaskCompleted(result);
+	    }	
 	}
 }

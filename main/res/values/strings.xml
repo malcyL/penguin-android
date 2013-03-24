@@ -7,6 +7,8 @@
     <string name="title_activity_queue_list">Queues</string>
     <string name="title_activity_queue">Queue</string>
     <string name="dialog_queue_edit">Rename Queue</string>
+    <string name="dialog_merge_story">Merge Story: </string>
+    <string name="merge">Merge</string>
     <string name="rename">Rename</string>
     <string name="cancel">Cancel</string>
     

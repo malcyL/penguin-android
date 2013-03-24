@@ -34,7 +34,7 @@ public class StoryAdapter extends ArrayAdapter<Story>
 	{
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.list_row_selectable, parent, false);
+		View view = inflater.inflate(R.layout.list_row, parent, false);
 
 		Story story = getItem(position);
 		
