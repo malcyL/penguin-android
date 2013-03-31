@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uk.co.blackpepper.android.layout.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+ 
+    <LinearLayout android:id="@+id/thumbnail_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip">
+ 
+	    <CheckBox
+    	    android:id="@+id/myCheckBox"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:background="@drawable/customcheckbox_background"
+        	android:button="@drawable/customcheckbox"
+        	android:clickable="false"
+        	android:focusable="false" />
+		 
+	</LinearLayout>
+ 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail_layout"
+        android:layout_toRightOf="@+id/thumbnail_layout"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+ 
+    <TextView
+        android:id="@+id/sub_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:textColor="?android:attr/textColorTertiary"
+        android:textSize="14sp"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/thumbnail_layout" />
+ 
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/title"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorTertiary"
+        android:textStyle="bold"/>
+ 
+</uk.co.blackpepper.android.layout.CheckableRelativeLayout>

@@ -16,7 +16,12 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -27,8 +32,6 @@ public class StoryListFragment extends ListFragment
 {
 	// constants --------------------------------------------------------------
 	
-	private static final int STORY_LIST_FRAGMENT = 1;
-
 	public static final String MERGED_KEY = "merged";
 	
 	private static final String TAG = StoryListFragment.class.getName();
@@ -63,30 +66,23 @@ public class StoryListFragment extends ListFragment
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
-	
+
 	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id)
+	public void onActivityCreated(Bundle savedInstanceState) 
 	{
-		Story story = (Story) listView.getItemAtPosition(position);
-		
-		MergeConfirmDialogFragment fragment = new MergeConfirmDialogFragment();
-
-		Bundle arguments = new Bundle();
-		arguments.putString(MergeConfirmDialogFragment.QUEUE_ID_KEY, queueId);
-		arguments.putString(MergeConfirmDialogFragment.STORY_ID_KEY, story.getId());
-		arguments.putString(MergeConfirmDialogFragment.STORY_REF_KEY, story.getReference());
-		fragment.setArguments(arguments);
-		
-		fragment.setTargetFragment(this, STORY_LIST_FRAGMENT);
-
-		fragment.show(getFragmentManager(), "merge");
+		super.onActivityCreated(savedInstanceState);
+        ListView lv = getListView();
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv.setMultiChoiceModeListener(new ModeCallback());
 	}
-
+	
     @Override
-    public void onDestroy() {
+    public void onDestroy() 
+    {
         super.onDestroy();
  
-        if (mergeTask != null) {
+        if (mergeTask != null) 
+        {
         	mergeTask.cancel(true);
         }
     }
@@ -143,7 +139,7 @@ public class StoryListFragment extends ListFragment
 	
 	// Merge Async Task methods ------------------------------------------------
 
-	public void mergeConfirmed(String queueId, String storyId) 
+	public void merge(String queueId, String storyId) 
 	{
 		mergeTask = new MergeAsyncTask(queueId, storyId, this);
 		mergeTask.execute();
@@ -206,4 +202,76 @@ public class StoryListFragment extends ListFragment
 			callback.onTaskCompleted(result);
 	    }	
 	}
+
+	// Multi Choice Mode Listener ---------------------------------------------------------------
+	
+    private class ModeCallback implements ListView.MultiChoiceModeListener {
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.list_select_menu, menu);
+            mode.setTitle("Select Items");
+            setSubtitle(mode);
+            return true;
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+            case R.id.merge:
+				String message = mergeCheckedStories();
+                mode.finish();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+            }
+            return true;
+        }
+
+		private String mergeCheckedStories()
+		{
+			StringBuilder builder = new StringBuilder();
+			builder.append("Merged: ");
+			final SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+			int checkedItemsCount = checkedItems.size();
+			for (int i = 0; i < checkedItemsCount; ++i) {
+				int position = checkedItems.keyAt(i);
+				if(checkedItems.valueAt(i)) {
+					Story storyToMerge = adapter.getItem(position); 
+					merge(queueId, storyToMerge.getId());
+					builder.append(storyToMerge.getReference());
+					builder.append(" ");
+				}
+			}
+			return builder.toString();
+		}
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        public void onItemCheckedStateChanged(ActionMode mode,
+                int position, long id, boolean checked) {
+            setSubtitle(mode);
+        }
+
+        private void setSubtitle(ActionMode mode) {
+            final int checkedCount = getListView().getCheckedItemCount();
+            switch (checkedCount) {
+                case 0:
+                    mode.setSubtitle(null);
+                    break;
+                case 1:
+                    mode.setSubtitle("One item selected");
+                    break;
+                default:
+                    mode.setSubtitle("" + checkedCount + " items selected");
+                    break;
+            }
+        }
+    }
+
 }

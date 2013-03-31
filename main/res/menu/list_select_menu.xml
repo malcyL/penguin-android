@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/merge"
+          android:title="@string/merge"
+          android:icon="@drawable/user_one"
+          android:showAsAction="always" />
+</menu>
