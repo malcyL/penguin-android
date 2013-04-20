@@ -1,5 +1,8 @@
 package uk.co.blackpepper.penguin.android;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,13 +12,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * A {@link android.support.v4.app.FragmentStatePagerAdapter} that returns a fragment representing an object in the
  * collection.
  */
-public class QueuePagerAdapter extends FragmentStatePagerAdapter
+public class QueuePagerAdapter extends FragmentStatePagerAdapter implements Refreshable
 {
+	private Refreshable refreshCallback;
+	private List<Refreshable> refreshables;
+	
 	// constructors -----------------------------------------------------------
 	
-	public QueuePagerAdapter(FragmentManager fragmentManager)
+	public QueuePagerAdapter(FragmentManager fragmentManager, Refreshable refreshCallback)
 	{
 		super(fragmentManager);
+		refreshables = new ArrayList<Refreshable>();
+		this.refreshCallback = refreshCallback;
 	}
 	
 	// FragmentStatePagerAdapter methods --------------------------------------
@@ -62,15 +70,29 @@ public class QueuePagerAdapter extends FragmentStatePagerAdapter
 		}
 	}
 	
+	// Refresh methods --------------------------------------------------------
+
+	@Override
+	public void refresh()
+	{
+		for (Refreshable r : refreshables)
+		{
+			r.refresh();
+		}
+	}
+
 	// private methods --------------------------------------------------------
 	
-	private static Fragment createStoryListFragment(boolean merged)
+	private Fragment createStoryListFragment(boolean merged)
 	{
-		Fragment fragment = new StoryListFragment();
+		StoryListFragment fragment = new StoryListFragment();
 		
 		Bundle arguments = new Bundle();
 		arguments.putBoolean(StoryListFragment.MERGED_KEY, merged);
 		fragment.setArguments(arguments);
+		
+		refreshables.add(fragment);
+		fragment.setRefreshCallback(refreshCallback);
 		
 		return fragment;
 	}

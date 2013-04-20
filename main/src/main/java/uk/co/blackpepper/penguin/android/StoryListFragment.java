@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class StoryListFragment extends ListFragment 
-	implements LoaderCallbacks<Either<List<Story>, ServiceException>>, MergeTaskCompleted
+	implements LoaderCallbacks<Either<List<Story>, ServiceException>>, MergeTaskCompleted, Refreshable, RefreshTaskCompleted
 {
 	// constants --------------------------------------------------------------
 	
@@ -48,21 +48,33 @@ public class StoryListFragment extends ListFragment
 
 	private MergeAsyncTask mergeTask; 
 	
+	private RefreshAsyncTask refreshTask; 
+	
+	private Refreshable refreshCallback;
+	
+	// Accessors
+	
+	public void setRefreshCallback(Refreshable refreshCallback) {
+		this.refreshCallback = refreshCallback;
+	}
+	
 	// ListFragment methods ---------------------------------------------------
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		queueId = getActivity().getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
-		merged = getArguments().getBoolean(MERGED_KEY);
+		if (null == savedInstanceState) {
+			queueId = getActivity().getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
+			merged = getArguments().getBoolean(MERGED_KEY);
 
-		storyService = new HttpClientStoryService(new DefaultHttpClient(),
-			PreferenceUtils.getServerApiUrl(inflater.getContext()));
+			storyService = new HttpClientStoryService(new DefaultHttpClient(),
+				PreferenceUtils.getServerApiUrl(inflater.getContext()));
 
-		adapter = new StoryAdapter(inflater.getContext(), android.R.layout.simple_list_item_1);
-		setListAdapter(adapter);
+			adapter = new StoryAdapter(inflater.getContext(), android.R.layout.simple_list_item_1);
+			setListAdapter(adapter);
 
-		getLoaderManager().initLoader(0, null, this);
+			getLoaderManager().initLoader(0, null, this);
+		}
 
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
@@ -84,6 +96,11 @@ public class StoryListFragment extends ListFragment
         if (mergeTask != null) 
         {
         	mergeTask.cancel(true);
+        }
+        
+        if (refreshTask != null)
+        {
+        	refreshTask.cancel(true);
         }
     }
  	
@@ -146,20 +163,16 @@ public class StoryListFragment extends ListFragment
 	}
 	
 	@Override
-	public void onTaskCompleted(Either<List<Story>, ServiceException> data)
+	public void onTaskCompleted(ServiceException exception)
 	{
-		if (data.isLeft())
-		{
-			adapter.setData(data.left());
-		}
-		else
+		if (exception != null)
 		{
 			Toast.makeText(getActivity(), R.string.toast_service_error, Toast.LENGTH_LONG).show();
-			Log.e(TAG, "Error merging story for queue: " + queueId, data.right());
+			Log.e(TAG, "Error merging story for queue: " + queueId, exception);
 		}
 	}
 
-	private class MergeAsyncTask extends AsyncTask<Void, String, Either<List<Story>, ServiceException>> 
+	private class MergeAsyncTask extends AsyncTask<Void, String, ServiceException> 
 	{
 		private final String queueId;
 		private final String storyId;
@@ -173,17 +186,70 @@ public class StoryListFragment extends ListFragment
 		}
 
 		@Override
-		protected Either<List<Story>, ServiceException> doInBackground(Void... params)
+		protected ServiceException doInBackground(Void... params)
 		{
 			try
 			{
-				storyService.merge(queueId, storyId);
+				if (!merged)
+				{
+					storyService.merge(queueId, storyId);
+				} 
+				else 
+				{
+					storyService.unmerge(queueId, storyId);
+				}
+				return null;
 			}
 			catch (ServiceException e)
 			{
-				return Either.right(e);
+				return e;
 			}
+		}
+		
+		@Override
+		protected void onPostExecute(ServiceException exception)
+		{
+			callback.onTaskCompleted(exception);
+	    }	
+	}
+	
+	// Refresh Task methods ---------------------------------------------------------------
 
+	@Override
+	public void refresh()
+	{
+		refreshTask = new RefreshAsyncTask(queueId, this);
+		refreshTask.execute();
+	}
+
+	@Override
+	public void onTaskCompleted(Either<List<Story>, ServiceException> data)
+	{
+		if (data.isLeft())
+		{
+			adapter.setData(data.left());
+		}
+		else
+		{
+			Toast.makeText(getActivity(), R.string.toast_service_error, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "Error refreshing queue: " + queueId, data.right());
+		}
+	}
+	
+	private class RefreshAsyncTask extends AsyncTask<Void, String, Either<List<Story>, ServiceException>> 
+	{
+		private final String queueId;
+		private final RefreshTaskCompleted callback;
+
+		public RefreshAsyncTask(String queueId, RefreshTaskCompleted callback)
+		{
+			this.queueId = queueId;
+			this.callback = callback;
+		}
+
+		@Override
+		protected Either<List<Story>, ServiceException> doInBackground(Void... params)
+		{
 			// Reloading the list seems a bit inefficient, but it works as a first step.
 			try
 			{
@@ -202,15 +268,23 @@ public class StoryListFragment extends ListFragment
 			callback.onTaskCompleted(result);
 	    }	
 	}
-
+	
 	// Multi Choice Mode Listener ---------------------------------------------------------------
 	
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = getActivity().getMenuInflater();
-            inflater.inflate(R.menu.list_select_menu, menu);
-            mode.setTitle("Select Items");
+            if (!merged) 
+            {
+                inflater.inflate(R.menu.pending_list_select_menu, menu);
+                mode.setTitle("Merging");
+            }
+            else
+            {
+                inflater.inflate(R.menu.merged_list_select_menu, menu);
+                mode.setTitle("Unmerging");
+            }
             setSubtitle(mode);
             return true;
         }
@@ -224,6 +298,7 @@ public class StoryListFragment extends ListFragment
             case R.id.merge:
 				String message = mergeCheckedStories();
                 mode.finish();
+        		refreshCallback.refresh();
                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -235,7 +310,14 @@ public class StoryListFragment extends ListFragment
 		private String mergeCheckedStories()
 		{
 			StringBuilder builder = new StringBuilder();
-			builder.append("Merged: ");
+			if (!merged) 
+			{
+				builder.append("Merged: ");
+			} 
+			else
+			{
+				builder.append("Unmerged: ");
+			}
 			final SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
 			int checkedItemsCount = checkedItems.size();
 			for (int i = 0; i < checkedItemsCount; ++i) {
@@ -273,5 +355,4 @@ public class StoryListFragment extends ListFragment
             }
         }
     }
-
 }

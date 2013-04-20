@@ -12,11 +12,11 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class QueueActivity extends FragmentActivity
+public class QueueActivity extends FragmentActivity implements Refreshable
 {
 	// fields -----------------------------------------------------------------
 	
-	private PagerAdapter pagerAdapter;
+	private QueuePagerAdapter pagerAdapter;
 
 	private ViewPager viewPager;
 
@@ -31,23 +31,25 @@ public class QueueActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_queue);
+		if (null == savedInstanceState) {
+			setContentView(R.layout.activity_queue);
 
-		queueId = getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
-		queueName = getIntent().getExtras().getString(QueueListFragment.QUEUE_NAME_KEY);
-		setTitle(queueName);
+			queueId = getIntent().getExtras().getString(QueueListFragment.QUEUE_ID_KEY);
+			queueName = getIntent().getExtras().getString(QueueListFragment.QUEUE_NAME_KEY);
+			setTitle(queueName);
 
-		pagerAdapter = new QueuePagerAdapter(getSupportFragmentManager());
+			pagerAdapter = new QueuePagerAdapter(getSupportFragmentManager(), this);
 
-		// configure action bar
-		
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+			// configure action bar
+			
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
 
-		// configure view pager
-		
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		viewPager.setAdapter(pagerAdapter);
+			// configure view pager
+			
+			viewPager = (ViewPager) findViewById(R.id.pager);
+			viewPager.setAdapter(pagerAdapter);
+		}
 	}
 
 	// Activity methods -------------------------------------------------------
@@ -95,6 +97,11 @@ public class QueueActivity extends FragmentActivity
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void refresh()
+	{
+		pagerAdapter.refresh();
+	}
 	// private methods --------------------------------------------------------
 
 	private void showQueueEditDialog()
