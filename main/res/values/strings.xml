@@ -9,6 +9,7 @@
     <string name="dialog_queue_edit">Rename Queue</string>
     <string name="dialog_merge_story">Merge Story: </string>
     <string name="merge">Merge</string>
+    <string name="unmerge">Unmerge</string>
     <string name="rename">Rename</string>
     <string name="cancel">Cancel</string>
     
